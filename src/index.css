@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes beam {
+  from {
+    opacity: 0.3;
+    transform: translateY(0%);
+  }
+  to {
+    opacity: 0.1;
+    transform: translateY(100%);
+  }
+}
