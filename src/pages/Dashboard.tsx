@@ -9,12 +9,13 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { Bell, Home, Map, MessageSquare, Shield, BookOpen, RefreshCcw } from "lucide-react";
+import { Bell, Home, Map, MessageSquare, Shield, BookOpen, RefreshCcw, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState("overview");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems = [
     { icon: Home, label: "Overview", id: "overview" },
@@ -274,11 +275,22 @@ const Dashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-[#121828]">
-        <Sidebar className="border-r border-[#102343]/30">
+      <div className="flex min-h-screen w-full bg-[#121828]">
+        {/* Mobile Menu Button */}
+        <button
+          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-[#102343]/50 text-white"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+
+        {/* Sidebar */}
+        <Sidebar className={`border-r border-[#102343]/30 ${isMobileMenuOpen ? 'block' : 'hidden'} lg:block`}>
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel className="text-base text-white/90">Disaster Guards</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-lg text-white/90 px-4 py-2">
+                Disaster Guards
+              </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   {menuItems.map((item) => (
@@ -286,7 +298,10 @@ const Dashboard = () => {
                       <SidebarMenuButton
                         asChild
                         isActive={activeSection === item.id}
-                        onClick={() => setActiveSection(item.id)}
+                        onClick={() => {
+                          setActiveSection(item.id);
+                          setIsMobileMenuOpen(false);
+                        }}
                       >
                         <button className="flex items-center gap-3 w-full px-4 py-2.5 rounded-lg transition-colors duration-200 hover:bg-[#102343]/50">
                           <item.icon className="h-5 w-5" />
@@ -301,8 +316,9 @@ const Dashboard = () => {
           </SidebarContent>
         </Sidebar>
 
-        <main className="flex-1 p-8 overflow-auto">
-          <div className="mb-8 max-w-[2000px] mx-auto">
+        {/* Main Content */}
+        <main className="flex-1 p-4 lg:p-8 overflow-auto">
+          <div className="max-w-[2000px] mx-auto">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
               <div>
                 <h1 className="text-2xl font-bold text-white mb-2">Welcome, Admin</h1>
